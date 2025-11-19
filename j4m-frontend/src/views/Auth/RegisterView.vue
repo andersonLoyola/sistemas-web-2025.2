@@ -50,25 +50,25 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-// Aqui definimos as variáveis que estão ligadas ao v-model lá em cima
+// definindo as variáveis que estão ligadas ao v-model lá em cima
 const form = reactive({
   name: '',
   email: '',
   password: '',
-  role: 'user' // Valor padrão
+  role: 'user'
 });
 
 const handleRegister = async () => {
   try {
-    // Enviamos os dados para a rota de registro do Laravel que criamos
+    // mandando os dados para a rota de registro do Laravel que foi criada
     const response = await axios.post('http://localhost:8000/api/register', form);
     
-    // Se der certo, salvamos o token e redirecionamos
+
     localStorage.setItem('token', response.data.access_token);
-    localStorage.setItem('user_role', response.data.data.role); // Salvamos se é user ou company
+    localStorage.setItem('user_role', response.data.data.role);
     
     alert('Conta criada com sucesso!');
-    router.push('/'); // Redireciona para a Home
+    router.push('/');
     
   } catch (error) {
     console.error(error);

@@ -39,15 +39,15 @@ const form = reactive({
 
 const handleLogin = async () => {
   try {
-    // Conexão com a API criada no passo anterior
+    // conexão com a API backend
     const response = await axios.post('http://localhost:8000/api/login', form);
     
-    // Salvar o token no localStorage (forma didática simples)
+    // salva o token no localStorage
     localStorage.setItem('token', response.data.access_token);
-    localStorage.setItem('user_role', response.data.user.role); // Salvar role para controle de acesso
+    localStorage.setItem('user_role', response.data.user.role);
 
     alert('Bem-vindo ao J4M!');
-    router.push('/dashboard'); // Redireciona para a área logada
+    router.push('/dashboard');
     
   } catch (error) {
     console.error(error);
