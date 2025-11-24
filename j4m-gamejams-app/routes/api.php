@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\GameJamController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -13,3 +14,5 @@ Route::middleware('auth:sanctum')->group(function () {
 		return $request->user();
 	});
 });
+
+Route::get('/gamejams', [GamejamController::class, 'index']);
