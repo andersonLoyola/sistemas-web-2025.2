@@ -27,7 +27,7 @@
             <option value="company">Empresa (Quero patrocinar/criar)</option>
           </select>
           <p class="text-xs text-gray-500 mt-1">
-            *Empresas podem criar Jams Oficiais com prêmios[cite: 11, 17].
+            *Empresas podem criar Jams Oficiais com prêmios.
           </p>
         </div>
         

@@ -54,6 +54,6 @@ class User extends Authenticatable
 
     public function gamejams()
     {
-        return $this->hasMany(Gamejam::class);
+        return $this->hasMany(GameJam::class);
     }
 }
