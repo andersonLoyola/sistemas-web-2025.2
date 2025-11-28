@@ -18,9 +18,9 @@ import { VoteModel } from './infrastructure/database/models/sequelize/vote.model
       dialect: 'postgres',
       host: process.env.DB_HOST ?? 'localhost',
       port: Number(process.env.DB_PORT || 5432),
-      username: process.env.DB_USER ?? 'laravel',
-      password: process.env.DB_PASSWORD ?? 'root',
-      database: process.env.DB_NAME ?? 'laravel',
+      username: process.env.DB_USER ?? 'j4m_user',
+      password: process.env.DB_PASSWORD ?? 'j4m_senha',
+      database: process.env.DB_NAME ?? 'j4m_db',
       models: [
         TeamModel, 
         GameJamModel, 

@@ -4,6 +4,7 @@ import { TeamModel } from '../../infrastructure/database/models/sequelize/team.m
 import { TeamSequelizeRepository } from '../../infrastructure/repositories/team.sequelize.repository';
 import { TeamsController } from '../../presenters/controllers/teams.controller';
 import { CreateTeamUseCase } from '../../application/use-cases/create-team.usecase';
+import { TeamDetailUseCase } from '../../application/use-cases/team-detail.usecase';
 
 @Module({
   imports: [SequelizeModule.forFeature([TeamModel])],
@@ -19,6 +20,7 @@ import { CreateTeamUseCase } from '../../application/use-cases/create-team.useca
       inject: ['TeamRepository'],
     },
     TeamSequelizeRepository, 
+    TeamDetailUseCase,
   ],
   exports: [],
 })
