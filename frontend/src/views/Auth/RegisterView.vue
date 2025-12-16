@@ -1,78 +1,89 @@
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-gray-100">
-    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
-      <h2 class="text-2xl font-bold mb-6 text-center text-indigo-600">J4M - Criar Conta</h2>
-      
-      <form @submit.prevent="handleRegister">
-        
-        <div class="mb-4">
-          <label class="block text-gray-700 text-sm font-bold mb-2">Nome Completo / Razão Social</label>
-          <input v-model="form.name" type="text" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
-        </div>
+  <div class="min-h-screen flex bg-gradient-to-tr from-black via-purple-900 to-purple-700 text-white">
+    <SidebarComponent />
 
-        <div class="mb-4">
-          <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
-          <input v-model="form.email" type="email" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
-        </div>
+    <main class="flex-1 flex items-center justify-center p-12">
+      <div class="w-[720px] bg-[#323232] rounded-3xl p-12 shadow-xl">
+        <div class="flex flex-col items-center">
+          <div class="text-pink-500 text-5xl font-extrabold mb-4">Jm</div>
+          <h1 class="text-3xl font-extrabold mb-6 text-center">Crie sua conta e comece já!</h1>
 
-        <div class="mb-4">
-          <label class="block text-gray-700 text-sm font-bold mb-2">Senha</label>
-          <input v-model="form.password" type="password" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
-        </div>
+          <form class="w-full max-w-lg" @submit.prevent="handleRegister">
+            <div class="mb-4">
+              <label class="text-sm mb-2 block">Email</label>
+              <input v-model="form.email" type="email" placeholder="Digite aqui..." class="w-full bg-black text-white placeholder-gray-400 px-4 py-3 rounded-xl border-2 border-white/80 focus:outline-none" required />
+            </div>
 
-        <div class="mb-6">
-          <label class="block text-gray-700 text-sm font-bold mb-2">Eu sou:</label>
-          <select v-model="form.role" class="w-full px-3 py-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            <option value="user">Desenvolvedor (Quero participar/criar)</option>
-            <option value="company">Empresa (Quero patrocinar/criar)</option>
-          </select>
-          <p class="text-xs text-gray-500 mt-1">
-            *Empresas podem criar Jams Oficiais com prêmios.
-          </p>
-        </div>
-        
-        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded hover:bg-indigo-700 transition duration-300">
-          Cadastrar
-        </button>
-      </form>
+            <div class="mb-4">
+              <label class="text-sm mb-2 block">Nome de usuário</label>
+              <input v-model="form.username" type="text" placeholder="Digite aqui..." class="w-full bg-black text-white placeholder-gray-400 px-4 py-3 rounded-xl border-2 border-white/80 focus:outline-none" required />
+            </div>
 
-      <p class="mt-4 text-center text-sm">
-        Já tem conta? <router-link to="/login" class="text-indigo-600 hover:underline">Faça Login</router-link>
-      </p>
-    </div>
+            <div class="mb-4">
+              <label class="text-sm mb-2 block">Senha</label>
+              <input v-model="form.password" type="password" placeholder="Digite aqui..." class="w-full bg-black text-white placeholder-gray-400 px-4 py-3 rounded-xl border-2 border-white/80 focus:outline-none" required />
+            </div>
+
+            <div class="mb-6">
+              <label class="text-sm mb-2 block">Confirmar Senha</label>
+              <input v-model="form.password_confirmation" type="password" placeholder="Digite aqui..." class="w-full bg-black text-white placeholder-gray-400 px-4 py-3 rounded-xl border-2 border-white/80 focus:outline-none" required />
+            </div>
+
+            <button type="submit" class="w-56 mx-auto block bg-gradient-to-r from-pink-500 to-pink-400 text-white font-bold py-3 rounded-full hover:brightness-110 transition">LET'S J4M!!</button>
+          </form>
+
+          <p class="mt-8 text-center text-sm">Já tem conta? <router-link to="/login" class="text-pink-400 font-semibold hover:underline">Faça Login</router-link></p>
+        </div>
+      </div>
+    </main>
   </div>
 </template>
 
 <script setup>
-import { reactive } from 'vue';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import http from '../../services/http.js'
+import SidebarComponent from '../../components/SidebarComponent.vue'
 
-const router = useRouter();
+const router = useRouter()
 
-// definindo as variáveis que estão ligadas ao v-model lá em cima
 const form = reactive({
-  name: '',
   email: '',
+  username: '',
   password: '',
-  role: 'user'
-});
+  password_confirmation: ''
+})
 
 const handleRegister = async () => {
-  try {
-    // mandando os dados para a rota de registro do Laravel que foi criada
-    const response = await axios.post('http://localhost:8000/api/register', form);
-    
-
-    localStorage.setItem('token', response.data.access_token);
-    localStorage.setItem('user_role', response.data.data.role);
-    
-    alert('Conta criada com sucesso!');
-    router.push('/');
-    
-  } catch (error) {
-    console.error(error);
-    alert('Erro ao cadastrar. Verifique se o email já existe ou se a senha é curta demais.');
+  if (form.password !== form.password_confirmation) {
+    alert('As senhas não conferem.')
+    return
   }
-};
+
+  try {
+    const payload = {
+      email: form.email,
+      username: form.username,
+      password: form.password,
+      password_confirmation: form.password_confirmation
+    }
+
+    const response = await http.post('/register', payload)
+    if (response.data && response.data.access_token) {
+      localStorage.setItem('token', response.data.access_token)
+    }
+    if (response.data && response.data.user && response.data.user.role) {
+      localStorage.setItem('user_role', response.data.user.role)
+    }
+    alert('Conta criada com sucesso!')
+    router.push('/login')
+  } catch (err) {
+    console.error(err)
+    alert('Erro ao cadastrar. Verifique os dados e tente novamente.')
+  }
+}
 </script>
+
+<style scoped>
+/* small adjustments kept intentionally minimal — styling handled with Tailwind */
+</style>
