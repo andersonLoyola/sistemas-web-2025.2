@@ -16,4 +16,9 @@ class GameJam extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function participants()
+    {
+        return $this->belongsToMany(User::class, 'game_jam_user', 'game_jam_id', 'user_id');
+    }
 }

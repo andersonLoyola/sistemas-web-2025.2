@@ -3,6 +3,7 @@ import LoginView from '../views/Auth/LoginView.vue'
 import RegisterView from '../views/Auth/RegisterView.vue'
 import HomeView from "../views/HomeView.vue";
 import CreateJamView from "../views/Dashboard/CreateJamView.vue";
+import JamDetailView from "../views/JamDetailView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,11 @@ const router = createRouter({
           if (!localStorage.getItem('token')) next('/login');
           else next();
       }
+    },
+    {
+      path: '/jam/:id',
+      name: 'jam-detail',
+      component: JamDetailView
     }
   ]
 })

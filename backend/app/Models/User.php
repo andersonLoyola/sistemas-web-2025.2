@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(GameJam::class);
     }
+
+    public function joinedJams()
+    {
+        return $this->belongsToMany(GameJam::class, 'game_jam_user', 'user_id', 'game_jam_id');
+    }
 }

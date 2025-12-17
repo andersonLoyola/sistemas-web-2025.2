@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\GameJam;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\GameJam;
 
 class GameJamController extends Controller
 {
@@ -32,5 +33,29 @@ class GameJamController extends Controller
         $jam = $request->user()->gamejams()->create($validated);
 
         return response()->json($jam, 201);
+    }
+
+    public function show($id)
+    {
+        $jam = GameJam::with('user')->withCount('participants')->findOrFail($id);
+
+        $isJoined = false;
+        if (Auth::guard('sanctum')->check()) {
+            $isJoined = $jam->participants()->where('user_id', Auth::guard('sanctum')->id())->exists();
+        }
+
+        return response()->json([
+            'jam' => $jam,
+            'is_joined' => $isJoined
+        ]);
+    }
+
+    public function join($id)
+    {
+        $jam = GameJam::findOrFail($id);
+        $user = Auth::guard('sanctum')->user();
+
+        $jam->participants()->syncWithoutDetaching([$user->id]);
+        return response()->json(['message' => 'Inscrição realizada com sucesso!']);
     }
 }
